@@ -1,0 +1,21 @@
+# Auto-normalize text files and prefer LF in the repo
+* text=auto
+* eol=lf
+
+# Ensure common source files are treated as text
+*.ts text
+*.tsx text
+*.js text
+*.jsx text
+*.css text
+*.json text
+*.md text
+
+# Mark generated directories as linguist-generated (less noise on GitHub)
+dist/** linguist-generated=true
+node_modules/** linguist-generated=true
+
+# Prevent packaging certain development files when using `git archive`
+*.log export-ignore
+tests/** export-ignore
+.vscode/** export-ignore

@@ -1,0 +1,86 @@
+{
+  "name": "star-glide",
+  "version": "1.0.0",
+  "description": "StarGlide — smooth hover-driven fractional star rating component for React.",
+  "keywords": [
+    "react",
+    "react-component",
+    "rating",
+    "star",
+    "hover",
+    "fractional-rating",
+    "ui",
+    "accessible"
+  ],
+  "license": "MIT",
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "src/styles/star-glide.css",
+    "README.md",
+    "LICENSE"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/j9mes-lloyd/star-glide.git"
+  },
+  "bugs": {
+    "url": "https://github.com/j9mes-lloyd/star-glide/issues"
+  },
+  "publishConfig": {
+    "@j9mes-lloyd:registry": "https://npm.pkg.github.com"
+  },
+  "homepage": "https://github.com/j9mes-lloyd/star-glide#readme",
+  "type": "module",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./styles.css": "./src/styles/star-glide.css"
+  },
+  "scripts": {
+    "clean": "rimraf dist",
+    "build": "npm run clean && tsup",
+    "dev": "tsup --watch",
+    "prev": "vite",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint \"src/**/*.{ts,tsx}\" --fix",
+    "prepare": "npm run build"
+  },
+  "peerDependencies": {
+    "bootstrap": ">=4.0.0",
+    "react": "^16.8.0 || ^17 || ^18",
+    "react-bootstrap": "^2 || ^3",
+    "react-dom": "^16.8.0 || ^17 || ^18"
+  },
+  "devDependencies": {
+    "@rollup/plugin-terser": "0.4.4",
+    "@testing-library/jest-dom": "6.8.0",
+    "@testing-library/react": "14.3.1",
+    "@types/jsdom": "21.1.7",
+    "@types/node": "24.3.0",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
+    "@vitejs/plugin-react": "5.0.2",
+    "detect-port": "2.1.0",
+    "eslint": "^8.0.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-react": "^7.37.5",
+    "jsdom": "22.1.0",
+    "prettier": "^2.0.0",
+    "rimraf": "^4.4.1",
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.2",
+    "vite": "7.1.3",
+    "vite-plugin-dts": "4.5.4",
+    "vitest": "3.2.4"
+  }
+}

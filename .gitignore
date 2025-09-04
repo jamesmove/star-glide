@@ -1,0 +1,93 @@
+# Node / package artifacts
+node_modules/
+dist/
+build/
+lib/
+.eslintcache
+.npm
+.npmrc
+
+# TypeScript
+*.tsbuildinfo
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+*.log
+
+# Coverage
+coverage/
+.nyc_output/
+
+# Test / vitest
+.vitest
+.vitest-coverage
+
+# Editor / IDE
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local
+.env.*.local
+.env.test
+.env.production
+local.env
+
+# Mac / Windows
+.AppleDouble
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+
+# Misc caches
+.cache/
+.cache-loader/
+.next/
+.out/
+.tmp/
+temp/
+tmp/
+.vite/
+parcel-cache/
+
+# TypeScript build output (if present)
+**/*.d.ts
+# If you publish types in dist, keep the dist copy — we still ignore other generated d.ts
+!dist/**/*.d.ts
+
+# Binary or generated assets you don't want in repo
+*.tgz
+*.zip
+
+# JetBrains
+.idea/
+
+# coverage / reports
+reports/
+coverage/
+
+# Optional lockfiles (if you prefer to ignore them, otherwise remove)
+# package-lock.json
+# yarn.lock
+
+# OS specific
+Thumbs.db
+ehthumbs.db
