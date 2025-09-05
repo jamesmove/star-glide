@@ -232,11 +232,13 @@ export default function App(): JSX.Element {
               onClick={() => {
                 // reset to defaults
                 setLive(2.4);
+                setFixedRating(2.4);
                 setFinal(3);
                 setSize(28);
                 setIconsCount(5);
                 setFillColor("gold");
                 setStaleOnClick(false);
+                setReadOnly(false);
                 setShowTooltip(true);
                 setDisableAutoStyle(false);
               }}
@@ -261,7 +263,7 @@ export default function App(): JSX.Element {
                 </div>
                 <div className="text-end">
                   <div className="small text-muted">Live value</div>
-                  <div className="h5 mb-0">{Number(live).toFixed(2)}</div>
+                  <div className="h5 mb-0">{Number(live).toFixed(1)}</div>
                 </div>
               </div>
 
@@ -277,7 +279,10 @@ export default function App(): JSX.Element {
                     readOnly={readOnly}
                     staleOnClick={staleOnClick}
                     onPointerMove={(v) => setLive(v)}
-                    onPointerClick={(v) => setFinal(v)}
+                    onPointerClick={(v) => {
+                      setFinal(v);
+                      setFixedRating(v);
+                    }}
                   />
                 </div>
               </div>
@@ -285,7 +290,7 @@ export default function App(): JSX.Element {
               <div className="mt-3 d-flex gap-3 flex-wrap">
                 <div className="me-3">
                   <small className="text-muted">Final rating:</small>
-                  <div className="fw-bold">{Number(final).toFixed(2)}</div>
+                  <div className="fw-bold">{Number(final).toFixed(1)}</div>
                 </div>
 
                 <div>
@@ -324,7 +329,7 @@ export default function App(): JSX.Element {
 
                 <div>
                   <small className="text-muted">Color</small>
-             
+
                   <div className="d-flex align-items-center gap-2 mt-1">
                     <select
                       className="form-select form-select-sm"
@@ -514,7 +519,7 @@ export default function App(): JSX.Element {
                     // Quick sample: open an alert with current values
                     alert(
                       `Live: ${live.toFixed(
-                        2
+                        1
                       )} / Icons: ${iconsCount} / Size: ${size}px`
                     );
                   }}
@@ -529,7 +534,7 @@ export default function App(): JSX.Element {
                       Math.round(Math.random() * iconsCount * 10) / 10;
                     setFixedRating(rnd);
                     setLive(rnd);
-                    setFinal(rnd);
+                    // setFinal(rnd);
                   }}
                 >
                   Random rating

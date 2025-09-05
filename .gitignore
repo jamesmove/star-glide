@@ -30,7 +30,7 @@ coverage/
 
 # Test / vitest
 .vitest
-.vitest.*
+vitest.*
 .vitest-coverage
 
 # Editor / IDE
