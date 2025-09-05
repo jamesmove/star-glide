@@ -35,12 +35,13 @@
   "main": "dist/index.cjs",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
+  "style": "dist/index.css",
   "exports": {
     ".": {
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
     },
-    "./styles.css": "./src/styles/star-glide.css"
+    "./styles": "./dist/index.css"
   },
   "scripts": {
     "clean": "rimraf dist",

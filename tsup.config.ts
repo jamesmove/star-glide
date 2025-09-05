@@ -7,7 +7,7 @@ export default defineConfig({
   dts: true,
   sourcemap: true,
   clean: true,
-  minify: false,
+  minify: true,
   splitting: false,
   external: [
     'react',
@@ -18,7 +18,7 @@ export default defineConfig({
   esbuildOptions(options) {
     options.loader = {
       ...options.loader,
-      '.css': 'text' // <<-- import css as string
+      // '.css': 'text' // <<-- import css as string
     };
     options.define = {
       ...options.define,

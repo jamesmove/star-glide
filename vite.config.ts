@@ -51,7 +51,7 @@ export default async ({ command } = { command: undefined }) => {
       minify: 'terser',
       outDir: path.resolve(__dirname, 'dist'),
       lib: {
-        entry: path.resolve(__dirname, 'src/index.ts'), // adjust to src/index.tsx if needed
+        entry: path.resolve(__dirname, 'src/index.tsx'), // adjust to src/index.tsx if needed
         name: Package.name,
         formats: ['es', 'cjs'],
         fileName: 'index',
