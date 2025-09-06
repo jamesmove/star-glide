@@ -92,25 +92,6 @@ export default defineConfig(({ mode }) => {
         : {},
       rollupOptions: {
         output: {
-          // manualChunks(id) {
-          //   if (id.includes("node_modules")) {
-          //     if (id.includes("react") || id.includes("react-dom") || id.includes("scheduler")) {
-          //       return "vendor.react";
-          //     }
-          //     if (id.includes("react-bootstrap") || id.includes("bootstrap")) {
-          //       return "vendor.bootstrap";
-          //     }
-          //     return "vendor";
-          //   }
-          // },
-          // chunkFileNames: "assets/js/[name]-[hash].js",
-          // entryFileNames: "assets/js/[name]-[hash].js",
-          // assetFileNames: ({ name }) =>
-          //   name && name.endsWith(".css")
-          //     ? "assets/css/[name]-[hash][extname]"
-          //     : name && /\.(png|jpe?g|svg|webp|avif)$/.test(name)
-          //     ? "assets/img/[name]-[hash][extname]"
-          //     : "assets/[name]-[hash][extname]",
           manualChunks(id) {
             if (id.includes('node_modules')) {
               return 'vendor';

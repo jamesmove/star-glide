@@ -1,7 +1,7 @@
 /* eslint-disable import/no-unresolved */
 import { useState, useEffect } from "react";
 import StarGlide from "@/StarGlide";
-import { ensureStyles } from "@/utils/ensureStyles";
+import "@/styles/star-glide.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 /**
@@ -41,12 +41,8 @@ export default function App(): JSX.Element {
   const [readOnly, setReadOnly] = useState<boolean>(false);
   const [staleOnClick, setStaleOnClick] = useState<boolean>(false);
   const [showTooltip, setShowTooltip] = useState<boolean>(true);
-  const [disableAutoStyle, setDisableAutoStyle] = useState<boolean>(false);
+  const [allowTransition, setTransition] = useState<boolean>(false);
 
-  // ensure styles once (no-op when already injected)
-  useEffect(() => {
-    if (!disableAutoStyle) ensureStyles();
-  }, [disableAutoStyle]);
 
   // convenience host ids
   const hostIdMain = "sg-host-main";
@@ -125,7 +121,7 @@ export default function App(): JSX.Element {
                 setStaleOnClick(false);
                 setReadOnly(false);
                 setShowTooltip(true);
-                setDisableAutoStyle(false);
+                setTransition(false);
               }}
             >
               Reset
@@ -166,7 +162,7 @@ export default function App(): JSX.Element {
                     onPointerMove={(v) => setLive(v)}
                     onPointerClick={(v) => {
                       setFinal(v);
-                      setFixedRating(v);
+                      // setFixedRating(v);
                     }}
                   />
                 </div>
@@ -292,15 +288,15 @@ export default function App(): JSX.Element {
                     <input
                       className="form-check-input"
                       type="checkbox"
-                      checked={disableAutoStyle}
-                      id="disableAutoStyleSwitch"
-                      onChange={(e) => setDisableAutoStyle(e.target.checked)}
+                      checked={allowTransition}
+                      id="transitionSwitch"
+                      onChange={(e) => setTransition(e.target.checked)}
                     />
                     <label
                       className="form-check-label small"
-                      htmlFor="disableAutoStyleSwitch"
+                      htmlFor="transitionSwitch"
                     >
-                      disableAutoStyle
+                      transition
                     </label>
                   </div>
                 </div>
@@ -336,21 +332,22 @@ export default function App(): JSX.Element {
             <div className="col-sm-6">
               <div className="card h-100 shadow-sm">
                 <div className="card-body">
-                  <h6 className="card-title">Manual CSS import example</h6>
+                  <h6 className="card-title">Transition / ratingTitle example</h6>
                   <p className="small text-muted">
-                    This instance uses `disableAutoStyle={"true"}` and relies on
-                    manual import at top of file.
+                    This instance uses `transition={"true"}` and setup a custom title for the StarGlide component.
                   </p>
                   <div id={hostIdManual} style={{ marginBottom: 12 }}>
                     <StarGlide
                       containerKey={hostIdManual}
                       rating={3.8}
-                      disableAutoStyle={true}
+                      size={20}
                       showTooltip
+                      transition={allowTransition}
+                      ratingTitle={"StarGlide with custom title and transition on"}
                     />
                   </div>
                   <div className="mt-2 small">
-                    Styles were imported manually at the top of this file.
+                     As mention in documentation, transition with slower the pointer hovering on stars.
                   </div>
                 </div>
               </div>
@@ -373,7 +370,7 @@ export default function App(): JSX.Element {
                   fall back to safe dimensions.
                 </li>
                 <li>
-                  • Use `disableAutoStyle` if you want to manage CSS yourself.
+                  • Use `transition` if you want to slower pointer stars hovering.
                 </li>
               </ul>
 

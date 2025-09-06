@@ -1,9 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
-// import './rating_stars.css';
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import type { StarGlideProps, FillColorSpec } from "./StarGlide.types";
-import { ensureStyles } from "./utils/ensureStyles";
-
+// eslint-disable-next-line import/no-unresolved
 const DEF_HEIGHT_STARS = 14;
 const DEF_ICONS_COUNT = 5;
 const INITIAL_RATING = 0;
@@ -24,7 +22,6 @@ const StarGlide: React.FC<StarGlideProps> = ({
   staleOnClick = false,
   readOnly = false,
   ratingTitle = "",
-  disableAutoStyle = false,
 }) => {
   // default svg data for star (string template)
   const DEF_SVG_DATA = useMemo(
@@ -94,10 +91,6 @@ const StarGlide: React.FC<StarGlideProps> = ({
   const [currFillColor, setCurrentFillColor] = useState<string>(
     currentFillColor.toString().trim()
   );
-  // const [currIconsSize, setCurrentIconsSize] =
-  //   useState<number>(currentIconsSize);
-  // const [currIconsCount, setCurrentIconsCount] =
-  //   useState<number>(currentIconsCount);
 
   // safe tooltip text (guard against non-finite rating)
   const tooltipText = `${
@@ -169,11 +162,20 @@ const StarGlide: React.FC<StarGlideProps> = ({
       console.log(error);
     }
   }, [DEF_FILL_COLORS, containerKey, currFillColor, currentFillColor]); // kept similar deps
-
-  // inject css once into a custom style tag
+  
+  // make sure that tracking hover bloc stars don't lose his dimension when [showTooltip] changes
   useEffect(() => {
-    if (!disableAutoStyle && containerStars) ensureStyles();
-  }, [disableAutoStyle, containerStars]);
+    if (!containerStars) return;
+    const hoverLayer = containerStars.querySelector<HTMLElement>(
+      "span.sb-hover-layer"
+    );
+    const starsBloc = containerStars.querySelector<HTMLElement>(".stars-bloc");
+    if (!hoverLayer || !starsBloc) return;
+    if (!hoverLayer.getAttribute('style')) {
+      hoverLayer.style.width=starsBloc.style.width;
+      hoverLayer.style.height=starsBloc.style.height;
+    }
+  }, [showTooltip, containerStars]);
 
   // layout / sizing adjustments, DOM manipulations
   useEffect(() => {

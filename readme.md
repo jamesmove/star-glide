@@ -15,8 +15,7 @@ Written in TypeScript, tested with Vitest, and designed so styles are injected o
 - Partially-filled star visuals implemented with layered backgrounds
 - Small, dependency-light runtime
 - TypeScript types, ESM + CJS builds supported
-- Props: `readOnly`, `staleOnClick`, `showTooltip`, `disableAutoStyle`, `fillColor`, `iconsCount`, `size`, and callback hooks
-- Styles injected once (no duplicated `<style>` tags even with many instances)
+- Main props: `rating`, `readOnly`, `staleOnClick`, `showTooltip`, `ratingTitle`, `fillColor`, `iconsCount`, `size`, and callback hooks
 
 ---
 
@@ -46,26 +45,14 @@ yarn add @jamesmove/star-glide
 Important: StarGlide expects the host container element with the id you pass as containerKey to exist in the DOM before the component mounts.
 
 ```tsx
-// In your JS/TSX code:
-import StarGlide from 'star-glide';
+// quick usage:
+import { StarGlide } from '@jamesmove/star-glide';
+import '@jamesmove/star-glide/style.css'
 
 <div id="sg-host">
     <StarGlide containerKey="sg-host" rating={2.3} />
 </div>
 ```
-
-If you prefer not to rely on auto-style injection, import the library CSS manually once:
-```tsx
-// style page is accessible without .css extension
-import 'star-glide/styles';
-// In your JS/TSX code:
-import StarGlide from 'star-glide';
-
-<div id="sg-host">
-    <StarGlide containerKey="sg-host" rating={2.3} disableAutoStyle/>
-</div>
-```
-In this example `disableAutoStyle` is set to true to disable auto import style of the component 
 
 ---
 
@@ -88,8 +75,7 @@ The only required prop is `containerKey`. It represent the id of the host contai
 |`transition`  | Define wether the star-glide component will be editable after click on a value or not.        | boolean      | false | ❌      |
 |`staleOnClick`  | Define wether the star-glide component will be editable or not.        | boolean      | false | ❌      |
 |`readOnly`  | The title that will appear on hover of the star-glide component.       | boolean      | false | ❌      |
-|`ratingTitle`  | The title that will appear on hover of the star-glide component.        | string      | "" | ❌      |
-|`disableAutoStyle`  | Text        | boolean      | false | ❌      |
+|`ratingTitle`  | The title that will appear on hover of the star-glide component.        | string      | "" | ❌      
 
 ### Behavior notes
 
@@ -119,43 +105,55 @@ The component verifies whether the configured total star width (size * iconsCoun
 
 ---
 
-## Styling
+## Accessibility / Animation
 
-StarGlide ships with a small CSS file that implements layered star visuals.
+StarGlide need you to import his css in other to works fine, you can also set a custom class name. It's also possible to change the default component title on hover.
+Finally you got the possibility to apply a transition on hover.
 
-Two ways to include it:
+1) **Accessibility**
 
-1) **Auto-injection (default; recommended)**
+If you want the library to work well don't forget to import css file. In addition you can set a custom title for the component.
 
-StarGlide calls an internal helper once to dynamically import the CSS (side-effect import). This injects the stylesheet a single time the first time StarGlide mounts.
-
-Internals:
-```ts
-// pseudo
-let stylesInjected = false;
-export function ensureStyles() {
-  if (stylesInjected) return;
-  import('@/styles/star-glide.css'); // side-effect import
-  stylesInjected = true;
-}
+StarGlide with custom title:
+```tsx
+// css imported with custom component title
+import { StarGlide } from '@jamesmove/star-glide';
+import '@jamesmove/star-glide/style.css';
+<div id='sg-host-style'>
+  <StarGlide containerKey="sg-host-style" ratingTitle="StarGlide with custom title" />
+</div>
 ```
 
-2) **Manual import**
+2) **Animation**
 
-If you want full control (e.g. server-side rendering, global bundling), set disableAutoStyle={true} and import the stylesheet once in your app:
+If you want full control you can setup a css class name that will be apply on main container. You can do it by specifying the class name in `className` prop. You can also enable the default transition by setting `transition` to `true`. This will slower hovering.
+
+Here is how:
 ```tsx
-// style page is accessible without .css extension
-import 'star-glide/styles';
-<StarGlide containerKey="host" disableAutoStyle />
+// transition plus custom className
+import { StarGlide } from '@jamesmove/star-glide';
+import '@jamesmove/star-glide/style.css';
+<div id='sg-host-animation'>
+  <StarGlide containerKey="sg-host-animation" transition className="custom-class-name" />
+</div>
 ```
 
 ---
 
 ## Troubleshooting
 
--   Component returns null — ensure the DOM element with id === containerKey exists before the component mounts.
--   Tooltip/portal errors in tests — call cleanup() before clearing document.body, and hide the tooltip (mouseLeave) before teardown in tests so react-bootstrap unmounts the portal.
--   Editor cannot resolve @/ alias — ensure tsconfig.json has:
+- Component returns null — ensure the DOM element with id === containerKey exists before the component mounts.
+- Tooltip/portal errors in tests — call cleanup() before clearing document.body, and hide the tooltip (mouseLeave) before teardown in tests so react-bootstrap unmounts the portal.
+- Component load but it's empty — make sure that you import the css file:
+```tsx
+import { StarGlide } from '@jamesmove/star-glide';
+import '@jamesmove/star-glide/style.css'
+
+<div id="sg-host-style">
+    <StarGlide containerKey="sg-host-style" />
+</div>
+```
+- Editor cannot resolve @/alias — ensure tsconfig.json has:
 ```json
 {
   "compilerOptions": {
@@ -165,8 +163,7 @@ import 'star-glide/styles';
 }
 ```
 and vite.config.ts contains the same alias mapping. Restart the editor TS server after changes.
--   CSS import error — import CSS for side-effects: import '.../styles.css'; (do not import styles from '...css' unless using CSS modules). 
-
+  
     Note: For any unexpected behavior check out you browser console, in most cases main error will be log there.
 
 ---

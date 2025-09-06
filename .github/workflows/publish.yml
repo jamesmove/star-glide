@@ -1,35 +1,49 @@
-name: Publish to npm
+name: Publish package to npmjs & GitHub Packages
 
 on:
   release:
-    types: [published]   # run when you publish a GitHub Release
+    types: [published]
   push:
     tags:
-      - 'v*.*.*'         # optional: also run on pushing a vX.Y.Z tag
+      - 'v*.*.*'
 
 jobs:
-  publish:
+  build-and-publish:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
-          registry-url: 'https://registry.npmjs.org/'
+          node-version: 18
+          registry-url: 'https://registry.npmjs.org/'  # default
 
-      - name: Install deps
+      - name: Install dependencies
         run: npm ci
 
       - name: Build
         run: npm run build
 
-      - name: Publish package
+      - name: Publish to npmjs.org
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
-          # Create .npmrc for the runner
-          echo "//registry.npmjs.org/:_authToken=\${NODE_AUTH_TOKEN}" > ~/.npmrc
-          # publish (scoped packages require --access public)
-          npm publish --access public
+          # write npmjs auth to ~/.npmrc for the runner
+          printf "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}\n" > ~/.npmrc
+          # publish (scoped requires --access public)
+          npm publish --access public --registry https://registry.npmjs.org/
+          # clean the token file
+          rm -f ~/.npmrc
+
+      - name: Publish to GitHub Packages
+        env:
+          GITHUB_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # write GitHub registry auth and scope mapping
+          printf "//npm.pkg.github.com/:_authToken=${GITHUB_AUTH_TOKEN}\n@${{ github.repository_owner }}:registry=https://npm.pkg.github.com/\n" > ~/.npmrc
+          # publish to GitHub Packages
+          npm publish --registry https://npm.pkg.github.com/
+          # cleanup
+          rm -f ~/.npmrc

@@ -1,13 +1,15 @@
 {
   "name": "@jamesmove/star-glide",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "StarGlide — smooth hover-driven fractional star rating component for React.",
   "keywords": [
     "react",
     "react-rating",
+    "react-rating-component",
     "react-component",
     "rating",
     "star",
+    "star-rating",
     "hover",
     "fractional-rating",
     "ui",
@@ -32,8 +34,7 @@
     "url": "https://github.com/j9mes-lloyd/star-glide/issues"
   },
   "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.npmjs.org"
+    "access": "public"
   },
   "homepage": "https://starglide.changebyweb.com",
   "type": "module",
@@ -46,7 +47,7 @@
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
     },
-    "./styles": "./dist/index.css"
+    "./styles.css": "./dist/index.css"
   },
   "scripts": {
     "clean": "rimraf dist",

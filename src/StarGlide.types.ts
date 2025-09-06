@@ -76,11 +76,6 @@ export interface StarGlideProps {
    * The title that will appear on hover of the star-glide component.
    */
   ratingTitle?: string;
-  /**
-   * If true, the library will NOT inject default styles at runtime.
-   * Consumers can then import 'star-glide/styles.css' manually once in their app.
-   */
-  disableAutoStyle?: boolean;
 }
 
 export interface FillColorSpec {
