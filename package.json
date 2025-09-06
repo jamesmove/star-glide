@@ -4,13 +4,17 @@
   "description": "StarGlide — smooth hover-driven fractional star rating component for React.",
   "keywords": [
     "react",
+    "react-rating",
     "react-component",
     "rating",
     "star",
     "hover",
     "fractional-rating",
     "ui",
-    "accessible"
+    "accessible",
+    "stars",
+    "typescript",
+    "star-glide"
   ],
   "license": "MIT",
   "sideEffects": false,
@@ -30,7 +34,7 @@
   "publishConfig": {
     "@j9mes-lloyd:registry": "https://npm.pkg.github.com"
   },
-  "homepage": "https://github.com/j9mes-lloyd/star-glide#readme",
+  "homepage": "https://starglide.changebyweb.com",
   "type": "module",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
@@ -45,8 +49,9 @@
   },
   "scripts": {
     "clean": "rimraf dist",
-    "build": "npm run clean && tsup",
-    "dev": "tsup --watch",
+    "dev": "npm run clean && tsup",
+    "watch": "tsup --watch",
+    "build": "vite build",
     "prev": "vite",
     "test": "vitest run",
     "test:watch": "vitest",
@@ -81,6 +86,7 @@
     "tsup": "^8.5.0",
     "typescript": "^5.9.2",
     "vite": "7.1.3",
+    "vite-plugin-compression": "0.5.1",
     "vite-plugin-dts": "4.5.4",
     "vitest": "3.2.4"
   }

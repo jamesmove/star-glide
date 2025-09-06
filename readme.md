@@ -3,6 +3,10 @@
 **StarGlide** — a small, focused React rating-stars library with **smooth fractional hover** (you can get values like `1.5`, `2.3`, `4.5` by moving the pointer across the icons).  
 Written in TypeScript, tested with Vitest, and designed so styles are injected once (no duplicate CSS when using many instances).
 
+![StarGlide Preview Gif](./src/assets/starglide-preview.gif "StarGlide Preview Gif")
+
+[Full Demo here](https://starglide.changebyweb.com/ "Full StarGlide Demo here")
+
 ---
 
 ## ⚡ Highlights
@@ -22,17 +26,18 @@ This is a library — to use it in your project install it from npm:
 
 ```bash
 npm install star-glide
-# or
+```
+```bash
 yarn add star-glide
 ```
 
 ### Peer dependencies (install in the consuming project):
 
-- ```react```
-- ```react-dom```
-- ```react-bootstrap``` (if you want the tooltip feature)
+- `react`
+- `react-dom`
+- `react-bootstrap` (if you want the tooltip feature)
 
-    Note: The ```dev``` scripts (```npm run prev```, ```npm run dev```, ```npm run build```, etc.) are only available in the library repository (development environment). They are not part of the package consumed via npm. See "Local development & testing" for running the playground locally.
+    Note: The ```dev``` scripts (```npm run prev```, ```npm run dev```, ```npm run build```, etc.) are only available in the library repository (development environment). They are not part of the package consumed via npm.
 
 ---
 
@@ -51,7 +56,8 @@ import StarGlide from 'star-glide';
 
 If you prefer not to rely on auto-style injection, import the library CSS manually once:
 ```tsx
-import 'star-glide/styles.css';
+// style page is accessible without .css extension
+import 'star-glide/styles';
 // In your JS/TSX code:
 import StarGlide from 'star-glide';
 
@@ -138,10 +144,10 @@ export function ensureStyles() {
 
 If you want full control (e.g. server-side rendering, global bundling), set disableAutoStyle={true} and import the stylesheet once in your app:
 ```tsx
-import 'star-glide/styles.css';
+// style page is accessible without .css extension
+import 'star-glide/styles';
 <StarGlide containerKey="host" disableAutoStyle />
 ```
-
 
 ---
 
@@ -159,7 +165,7 @@ import 'star-glide/styles.css';
 }
 ```
 and vite.config.ts contains the same alias mapping. Restart the editor TS server after changes.
--   CSS import error — import CSS for side-effects: import '.../styles.css'; (do not import styles from '...css' unless using CSS modules).
+-   CSS import error — import CSS for side-effects: import '.../styles.css'; (do not import styles from '...css' unless using CSS modules). 
 
     Note: For any unexpected behavior check out you browser console, in most cases main error will be log there.
 

@@ -3,9 +3,14 @@ node_modules/
 dist/
 build/
 lib/
+docs/
 .eslintcache
 .npm
 .npmrc
+package-lock.json
+vite.example.config.ts
+.zip.*
+.tgz.*
 
 # TypeScript
 *.tsbuildinfo

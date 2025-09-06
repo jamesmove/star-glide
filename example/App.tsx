@@ -1,139 +1,6 @@
 /* eslint-disable import/no-unresolved */
 import { useState, useEffect } from "react";
-/**
- * Important:
- * - We import the library source directly from src using the '@' alias configured in vite.config.ts:
- *    import StarGlide from '@/StarGlide'
- * - The vite config we set earlier resolves '@' -> ./src
- *
- * If your vite config doesn't define '@' alias, replace the import with:
- *    import StarGlide from '../src/StarGlide'
- */
 import StarGlide from "@/StarGlide";
-import "@/styles/star-glide.css"; // optional - import library CSS manually (if disableAutoStyle is used)
-
-// export default function App() {
-//   // live value updated during hover or click
-//   const [live, setLive] = useState<number>(2.4);
-//   const [final, setFinal] = useState<number>(3);
-//   const [readOnly, setReadOnly] = useState<boolean>(false);
-
-//   return (
-//     <div style={{ padding: 24, fontFamily: "system-ui, sans-serif" }}>
-//       <h1>StarGlide — Complete Playground</h1>
-//       <section style={{ marginBottom: 24 }}>
-//         <h2>Basic (auto styles, fractional hover)</h2>
-//         <div id="host-basic" style={{ margin: "8px 0" }}>
-//           <StarGlide
-//             containerKey="host-basic"
-//             rating={live}
-//             iconsCount={5}
-//             size={28}
-//             fillColor="orange"
-//             onPointerMove={(v) => setLive(v)}
-//             onPointerClick={(v) => setFinal(v)}
-//           />
-//         </div>
-//         <div style={{ marginTop: 8 }}>
-//           Live: {live.toFixed(2)} • Final: {final.toFixed(2)}
-//         </div>
-//       </section>{" "}
-
-//       <section style={{ marginBottom: 24 }}>
-//         <h2>Tooltip off / transition on</h2>
-//         <div id="host-tooltip" style={{ margin: "8px 0" }}>
-//           <StarGlide
-//             containerKey="host-tooltip"
-//             rating={1.2}
-//             iconsCount={5}
-//             size={28}
-//             showTooltip={false}
-//             transition
-//           />
-//         </div>
-//          <div style={{ marginTop: 8 }}>Transition on, make the hover more slow</div>
-//       </section>
-
-//       <section style={{ marginBottom: 24 }}>
-//         <h2>Large stars / more icons</h2>
-//         <div id="host-large" style={{ margin: "8px 0" }}>
-//           <StarGlide
-//             containerKey="host-large"
-//             rating={1.2}
-//             iconsCount={8}
-//             size={36}
-//             fillColor="purple"
-//             showTooltip
-//           />
-//         </div>
-//         <div style={{ marginTop: 8 }}>8 icons, size 36px</div>
-//       </section>
-//       <section style={{ marginBottom: 24 }}>
-//         <h2>ReadOnly / staleOnClick behaviors</h2>
-//         <div style={{ marginBottom: 8 }}>
-//           <button
-//             className="btn btn-outline-primary"
-//             onClick={() => setReadOnly((s) => !s)}
-//           >
-//             Toggle readOnly ({String(readOnly)})
-//           </button>
-//         </div>
-
-//         <div id="host-readonly" style={{ margin: "8px 0" }}>
-//           <StarGlide
-//             containerKey="host-readonly"
-//             rating={2.5}
-//             readOnly={readOnly}
-//             showTooltip
-//             size={20}
-//           />
-//         </div>
-//         <div id="host-stale" style={{ marginTop: 12 }}>
-//           <StarGlide
-//             containerKey="host-stale"
-//             rating={0}
-//             staleOnClick
-//             showTooltip
-//             size={20}
-//             onPointerClick={(r) => alert("Clicked rating: " + r.toFixed(2))}
-//           />
-//         </div>
-//         <div style={{ marginTop: 8 }}>
-//           StaleOnClick: click to set rating, subsequent hovers {"won't"} change
-//           it.
-//         </div>
-//       </section>
-//       <section style={{ marginBottom: 24 }}>
-//         <h2>Manual CSS import (disableAutoStyle)</h2>
-//         <div id="host-manual" style={{ margin: "8px 0" }}>
-//           <StarGlide
-//             containerKey="host-manual"
-//             rating={4.5}
-//             disableAutoStyle={true}
-//             showTooltip
-//             size={20}
-//           />
-//         </div>
-//         <div style={{ marginTop: 8 }}>
-//           Here we imported the CSS manually at the top of the file.
-//         </div>
-//       </section>
-//       <section>
-//         <h2>Multiple instances on same page</h2>
-//         <div id="host-a" style={{ margin: "8px 0" }}>
-//           <StarGlide containerKey="host-a" rating={1.8} size={20} />
-//         </div>
-//         <div id="host-b" style={{ margin: "8px 0" }}>
-//           <StarGlide containerKey="host-b" rating={4.2} size={20} />
-//         </div>
-//         <div style={{ marginTop: 8 }}>
-//           Styles are injected only once even with multiple instances.
-//         </div>
-//       </section>
-//     </div>
-//   );
-// }
-
 import { ensureStyles } from "@/utils/ensureStyles";
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -211,7 +78,25 @@ export default function App(): JSX.Element {
     >
       <div className="row align-items-center mb-3">
         <div className="col-md-8">
-          <h1 className="display-6 mb-1">StarGlide — Playground</h1>
+          <div className="d-flex justify-content-between align-items-center">
+            <h1 className="display-7 mb-1 fw-bold">StarGlide</h1>
+            <a
+              href="https://github.com/j9mes-lloyd/star-glide"
+              rel={"noreferrer"}
+              aria-label="Visit GitHub repository"
+              title="Visit GitHub repository"
+              target="_blank"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+              >
+                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"></path>
+              </svg>
+            </a>
+          </div>
           <p className="text-muted mb-0">
             Smooth fractional hover ratings — try moving your pointer over the
             stars to see live fractional values.
@@ -261,7 +146,7 @@ export default function App(): JSX.Element {
                     for you.
                   </p>
                 </div>
-                <div className="text-end">
+                <div className="text-live">
                   <div className="small text-muted">Live value</div>
                   <div className="h5 mb-0">{Number(live).toFixed(1)}</div>
                 </div>
@@ -551,8 +436,16 @@ export default function App(): JSX.Element {
       </div>
 
       <footer className="text-center text-muted small mt-4">
-        StarGlide — fractional star ratings • Try multiple instances, responsive
-        controls and manual CSS import.
+        StarGlide — Fractional star ratings • MIT Licensed © 2025{" "}
+        <a
+          href="https://changebyweb.com"
+          rel="noreferrer"
+          aria-label="Visit James Move Portfolio"
+          title="Visit James Move Portfolio"
+          target="_blank"
+        >
+          James Move
+        </a>
       </footer>
     </div>
   );

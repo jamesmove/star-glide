@@ -1,95 +1,137 @@
 /* eslint-disable import/no-named-as-default */
-import { defineConfig } from 'vite';
-// eslint-disable-next-line import/no-unresolved
-import react from '@vitejs/plugin-react';
-import terser from '@rollup/plugin-terser';
-import dts from 'vite-plugin-dts';
-import path from 'path';
-import detect from 'detect-port';
-import Package from './package.json';
+/* eslint-disable import/no-unresolved */
 
-export default async ({ command } = { command: undefined }) => {
-  const isBuild = command === 'build';
+// vite.example.config.ts
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import path from "path";
+import compression from "vite-plugin-compression";
+import detect from "detect-port";
 
-  // prefer PORT env if present, otherwise start looking at 4000
-  const preferredPort = process.env.PORT ? Number(process.env.PORT) : 4000;
-  // detect a free port (returns the preferred port if it's free)
-  const port = await detect(preferredPort);
+// ---- Auto port detection (top-level await, no async defineConfig) ----
+const DEFAULT_DEV_PORT = Number(process.env.EXAMPLE_DEV_PORT || 5173);
+const DEFAULT_PREVIEW_PORT = Number(process.env.EXAMPLE_PREVIEW_PORT || 4173);
 
-  return defineConfig({
-    // Serve the example folder as the Vite root in dev.
-    root: path.resolve(__dirname, 'example'),
+let DEV_PORT = DEFAULT_DEV_PORT;
+let PREVIEW_PORT = DEFAULT_PREVIEW_PORT;
 
-    define: {
-      __DEV__: !isBuild,
+try {
+  DEV_PORT = await detect(DEFAULT_DEV_PORT);
+} catch {
+  DEV_PORT = DEFAULT_DEV_PORT;
+}
+try {
+  PREVIEW_PORT = await detect(DEFAULT_PREVIEW_PORT);
+} catch {
+  PREVIEW_PORT = DEFAULT_PREVIEW_PORT;
+}
+// ---------------------------------------------------------------------
+
+const ROOT = path.resolve(__dirname, "example");
+const OUT_DIR = path.resolve(__dirname, "docs");
+
+export default defineConfig(({ mode }) => {
+  const isProd = mode === "production";
+
+  return {
+    root: ROOT,
+
+    resolve: {
+      alias: {
+        "@": path.resolve(__dirname, "src"),
+      },
     },
 
     plugins: [
       react(),
-      // generate types only in build mode
-      ...(isBuild
-        ? [
-            dts({
-              insertTypesEntry: true,
-              rollupTypes: true,
-            }),
-          ]
-        : []),
-    ],
+      // Production-only precompression
+      isProd &&
+      compression({
+        verbose: false,
+        threshold: 1024,
+        algorithm: "gzip",
+        ext: ".gz",
+      }),
+      isProd &&
+      compression({
+        verbose: false,
+        threshold: 1024,
+        algorithm: "brotliCompress",
+        ext: ".br",
+      }),
+    ].filter(Boolean),
 
     server: {
-      // Make the dev server accessible from the host and other devices on the LAN.
-      // This avoids "not accessible" issues on WSL, Docker, or certain Windows setups.
-      host: '0.0.0.0',
-      port,
-      strictPort: false,
+      host: "0.0.0.0",
+      port: DEV_PORT,       // auto-picked free port
+      strictPort: false,    // if busy, Vite will still try next; DEV_PORT is already free though
       open: true,
     },
 
-    // Build the library when running `vite build` from project root (not the example).
+    preview: {
+      port: PREVIEW_PORT,   // auto-picked free port for preview server
+      open: false,
+    },
+
     build: {
-      minify: 'terser',
-      outDir: path.resolve(__dirname, 'dist'),
-      lib: {
-        entry: path.resolve(__dirname, 'src/index.tsx'), // adjust to src/index.tsx if needed
-        name: Package.name,
-        formats: ['es', 'cjs'],
-        fileName: 'index',
-      },
+      outDir: OUT_DIR,
+      emptyOutDir: true,
+      target: "es2019",
+      sourcemap: !isProd,
+      minify: isProd ? "terser" : false,
+      terserOptions: isProd
+        ? {
+          compress: {
+            drop_console: true,
+            drop_debugger: true,
+            passes: 3,
+          },
+          mangle: true,
+          format: { comments: false },
+        }
+        : {},
       rollupOptions: {
-        // don't bundle these peers
-        external: ['react', 'react-dom', 'react/jsx-runtime', 'react-bootstrap', 'bootstrap'],
         output: {
-          globals: {
-            react: 'React',
-            'react/jsx-runtime': 'React',
-            'react-dom': 'ReactDOM',
+          // manualChunks(id) {
+          //   if (id.includes("node_modules")) {
+          //     if (id.includes("react") || id.includes("react-dom") || id.includes("scheduler")) {
+          //       return "vendor.react";
+          //     }
+          //     if (id.includes("react-bootstrap") || id.includes("bootstrap")) {
+          //       return "vendor.bootstrap";
+          //     }
+          //     return "vendor";
+          //   }
+          // },
+          // chunkFileNames: "assets/js/[name]-[hash].js",
+          // entryFileNames: "assets/js/[name]-[hash].js",
+          // assetFileNames: ({ name }) =>
+          //   name && name.endsWith(".css")
+          //     ? "assets/css/[name]-[hash][extname]"
+          //     : name && /\.(png|jpe?g|svg|webp|avif)$/.test(name)
+          //     ? "assets/img/[name]-[hash][extname]"
+          //     : "assets/[name]-[hash][extname]",
+          manualChunks(id) {
+            if (id.includes('node_modules')) {
+              return 'vendor';
+            }
+          },
+          chunkFileNames: "assets/js/[name]-[hash].js",
+          entryFileNames: "assets/js/[name]-[hash].js",
+          assetFileNames: ({ name }) => {
+            if (name && name.endsWith('.css')) return "assets/css/[name]-[hash][extname]";
+            if (name && /\.(png|jpe?g|svg|webp|avif)$/.test(String(name))) return "assets/img/[name]-[hash][extname]";
+            return "assets/[name]-[hash][extname]";
           },
         },
-        plugins: [
-          terser({
-            compress: {
-              defaults: true,
-              drop_console: false,
-            },
-          }),
-        ],
       },
+      assetsInlineLimit: 4096,
     },
 
-    // Resolve alias so example can import library source via '@/...'
-    resolve: {
-      alias: {
-        '@': path.resolve(__dirname, 'src'),
-      },
+    optimizeDeps: {
+      include: ["react", "react-dom", "react-bootstrap"],
     },
 
-    // Vitest options (if you run tests via `vite` too)
-    test: {
-      globals: true,
-      environment: 'jsdom',
-      include: ['tests/**/*.test.{ts,tsx}'],
-      exclude: ['**/node_modules/**', '**/dist/**'],
-    },
-  });
-};
+    logLevel: "info",
+  };
+});

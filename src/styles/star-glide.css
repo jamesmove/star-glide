@@ -62,3 +62,15 @@ span.sb-gold-layer {
 .tooltip {
   z-index: 50000 !important;
 }
+
+.text-live{
+  text-align: right;
+}
+
+@media (max-width: 767px) {
+  
+  .text-live{
+    text-align: left;
+  }
+  
+}
