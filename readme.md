@@ -25,10 +25,10 @@ Written in TypeScript, tested with Vitest, and designed so styles are injected o
 This is a library — to use it in your project install it from npm:
 
 ```bash
-npm install star-glide
+npm install @jamesmove/star-glide
 ```
 ```bash
-yarn add star-glide
+yarn add @jamesmove/star-glide
 ```
 
 ### Peer dependencies (install in the consuming project):
