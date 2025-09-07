@@ -1,6 +1,6 @@
 {
   "name": "@jamesmove/star-glide",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "description": "StarGlide — smooth hover-driven fractional star rating component for React.",
   "keywords": [
     "react",
