@@ -1,4 +1,4 @@
-name: Publish package to npmjs & GitHub Packages
+name: Publish to npmjs & GitHub Packages
 
 on:
   release:
@@ -7,43 +7,100 @@ on:
     tags:
       - 'v*.*.*'
 
+permissions:
+  contents: read
+  packages: write
+  id-token: write
+
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
+    env:
+      PACKAGE_JSON: package.json
+
     steps:
-      - name: Checkout code
+      - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Use Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
-          registry-url: 'https://registry.npmjs.org/'  # default
+          node-version: '18'
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Show versions & package
+        run: |
+          echo "Repo: $GITHUB_REPOSITORY"
+          node -e "const p=require('./package.json'); console.log('pkg:',p.name,'version:',p.version)"
+
+      - name: Install dependencies (ci if lock exists otherwise install)
+        run: |
+          if [ -f package-lock.json ]; then
+            echo "Using npm ci"
+            npm ci
+          else
+            echo "No package-lock.json, using npm install"
+            npm install
+          fi
 
       - name: Build
         run: npm run build
 
-      - name: Publish to npmjs.org
+      - name: Determine package and version
+        id: meta
+        run: |
+          pkg=$(node -e "console.log(require('./package.json').name)")
+          ver=$(node -e "console.log(require('./package.json').version)")
+          echo "pkg=${pkg}" >> $GITHUB_OUTPUT
+          echo "ver=${ver}" >> $GITHUB_OUTPUT
+
+      - name: Check if version exists on npmjs
+        id: check_npmjs
+        run: |
+          pkg="${{ steps.meta.outputs.pkg }}"
+          ver="${{ steps.meta.outputs.ver }}"
+          echo "Checking npmjs for $pkg@$ver"
+          # Query registry; exit code 0 if found.
+          if npm view "$pkg@$ver" version --registry https://registry.npmjs.org/ > /dev/null 2>&1; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Publish to npmjs.org (if not present)
+        if: steps.check_npmjs.outputs.exists == 'false'
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
-          # write npmjs auth to ~/.npmrc for the runner
+          echo "Publishing to npmjs.org..."
           printf "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}\n" > ~/.npmrc
-          # publish (scoped requires --access public)
           npm publish --access public --registry https://registry.npmjs.org/
-          # clean the token file
           rm -f ~/.npmrc
 
-      - name: Publish to GitHub Packages
+      - name: Check if version exists on GitHub Packages
+        id: check_github
+        run: |
+          pkg="${{ steps.meta.outputs.pkg }}"
+          ver="${{ steps.meta.outputs.ver }}"
+          # make npm query against github registry for this scope (if scoped)
+          echo "Checking GitHub Packages for $pkg@$ver"
+          if npm view "$pkg@$ver" version --registry https://npm.pkg.github.com/ > /dev/null 2>&1; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Publish to GitHub Packages (if not present)
+        if: steps.check_github.outputs.exists == 'false'
         env:
           GITHUB_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # write GitHub registry auth and scope mapping
-          printf "//npm.pkg.github.com/:_authToken=${GITHUB_AUTH_TOKEN}\n@${{ github.repository_owner }}:registry=https://npm.pkg.github.com/\n" > ~/.npmrc
-          # publish to GitHub Packages
+          echo "Publishing to GitHub Packages..."
+          # Ensure the scoped mapping points to github registry (replace '@your-username' if necessary)
+          owner=${{ github.repository_owner }}
+          printf "//npm.pkg.github.com/:_authToken=${GITHUB_AUTH_TOKEN}\n@${owner}:registry=https://npm.pkg.github.com/\n" > ~/.npmrc
           npm publish --registry https://npm.pkg.github.com/
-          # cleanup
           rm -f ~/.npmrc
+
+      - name: Done - report published versions
+        run: |
+          node -e "const p=require('./package.json'); console.log('Finished. package:', p.name, p.version)"
