@@ -1,6 +1,8 @@
+/* eslint-disable import/no-unresolved */
 import { useEffect, useMemo, useState } from "react";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import type { StarGlideProps, FillColorSpec } from "./StarGlide.types";
+import "@/styles/star-glide.css";
 // eslint-disable-next-line import/no-unresolved
 const DEF_HEIGHT_STARS = 14;
 const DEF_ICONS_COUNT = 5;

@@ -1,6 +1,6 @@
 {
   "name": "@jamesmove/star-glide",
-  "version": "1.1.6",
+  "version": "1.1.5",
   "description": "StarGlide — smooth hover-driven fractional star rating component for React.",
   "keywords": [
     "react",
@@ -51,10 +51,10 @@
   },
   "scripts": {
     "clean": "rimraf dist",
-    "dev": "npm run clean && tsup",
+    "build": "npm run clean && tsup",
     "watch": "tsup --watch",
-    "build": "vite build",
-    "prev": "vite",
+    "prod": "vite build",
+    "dev": "vite",
     "test": "vitest run",
     "test:watch": "vitest",
     "lint": "eslint \"src/**/*.{ts,tsx}\" --fix",

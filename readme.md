@@ -36,7 +36,7 @@ yarn add @jamesmove/star-glide
 - `react-dom`
 - `react-bootstrap` (if you want the tooltip feature)
 
-    Note: The ```dev``` scripts (```npm run prev```, ```npm run dev```, ```npm run build```, etc.) are only available in the library repository (development environment). They are not part of the package consumed via npm.
+    Note: The ```dev``` scripts (```npm run prod```, ```npm run dev```, ```npm run build```, etc.) are only available in the library repository (development environment). They are not part of the package consumed via npm.
 
 ---
 
