@@ -9,6 +9,7 @@ export default defineConfig({
   clean: true,
   minify: true,
   splitting: false,
+  target: 'es2019',
   external: [
     'react',
     'react-dom',
@@ -18,7 +19,7 @@ export default defineConfig({
   esbuildOptions(options) {
     options.loader = {
       ...options.loader,
-      // '.css': 'text' // <<-- import css as string
+      '.css': 'text' // <<-- import css as string
     };
     options.define = {
       ...options.define,

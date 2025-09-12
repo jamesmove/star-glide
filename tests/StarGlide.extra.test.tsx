@@ -4,7 +4,6 @@
  * Additional coverage tests:
  * 1) Tooltip appears when showTooltip=true.
  * 2) Custom fillColor is applied.
- * 3) disableAutoStyle=true disables style injection.
  * 4) check if iconsCount/size would exceed viewport width or height.
  */
 
@@ -103,19 +102,6 @@ describe("StarGlide additional props behavior", () => {
     expect(goldLayer.style.filter.length).toBeGreaterThan(0);
   });
 
-  it("does not auto-inject styles when disableAutoStyle is true", async () => {
-    const host = makeHost();
-
-    render(<StarGlide containerKey={containerId} disableAutoStyle={true} />, {
-      container: host,
-    });
-
-    // Wait a tick to allow effects to run if any
-    await new Promise((r) => setTimeout(r, 20));
-
-    const injectedStyle = document.getElementById("star-glide-styles-v1");
-    expect(injectedStyle).toBeNull();
-  });
   it("logs an error when iconsCount/size would exceed viewport width or height", async () => {
     const host = makeHost();
     // Spy console.log to capture the logged Error

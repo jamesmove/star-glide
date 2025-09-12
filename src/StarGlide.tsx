@@ -1,9 +1,7 @@
-/* eslint-disable import/no-unresolved */
-// eslint-disable-next-line import/no-unresolved
+
 import { useEffect, useMemo, useState, } from "react";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import type { StarGlideProps, FillColorSpec } from "./StarGlide.types";
-import "@/styles/star-glide.css";
 const DEF_HEIGHT_STARS = 14;
 const DEF_ICONS_COUNT = 5;
 const INITIAL_RATING = 0;
@@ -107,6 +105,7 @@ const StarGlide: React.FC<StarGlideProps> = ({
       {tooltipText}
     </Tooltip>
   );
+  
   // set up fill color filter and find container element
   useEffect(() => {
     try {

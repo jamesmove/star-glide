@@ -9,8 +9,7 @@ docs/
 .npmrc
 package-lock.json
 vite.example.config.ts
-.zip.*
-.tgz.*
+scripts/
 
 # TypeScript
 *.tsbuildinfo
